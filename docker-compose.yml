@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgis/postgis
+    restart: always
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: jerry
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: vikeandsell
+
+  datalayer:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      API_KEY: apikey123
+    ports:
+      - 8089:8089
