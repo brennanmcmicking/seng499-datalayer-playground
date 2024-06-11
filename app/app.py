@@ -43,9 +43,13 @@ def make_user():
         email = data["email"]
         password = data["password"]
         location = f"ST_GeographyFromText('SRID=4326;POINT({data["location"]})')"
-        print(f"creating user {username}")
-        conn.execute(f"INSERT INTO Users (username, email, password, location, join_date, items_sold, items_purchased) \
-                              VALUES ('{username}', '{email}', '{password}', {location}, NOW(), array[]::integer[], array[]::integer[])")
+        print(f"creating user {username}, {email}")
+        try:
+            conn.execute(f"INSERT INTO Users (username, email, password, location, join_date, items_sold, items_purchased) \
+                                VALUES ('{username}', '{email}', '{password}', {location}, NOW(), array[]::integer[], array[]::integer[])")
+        except psycopg.errors.UniqueViolation:
+            print(f"tried to create user {username}, {email} but they already exist!")
+            return Response(status=409)
         return Response(status=200)
 
 
