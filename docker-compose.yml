@@ -11,9 +11,7 @@ services:
   datalayer:
     depends_on:
       - db
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: datalayer
     restart: always
     environment:
       API_KEY: apikey123
